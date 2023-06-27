@@ -46,8 +46,8 @@ for sub_list in list_sub_folder:
     get_files_in_directory(root_directory, sub_list)
 
 try:
-    f = open("./monitoring.json")
-    monitoring = json.load(f)
+    with open("./monitoring.json") as f:
+        monitoring = json.load(f)
 except:
     monitoring = {}
 
@@ -59,5 +59,26 @@ else:
     get_list_failed = [key for key in monitoring.keys() if monitoring[key] != "[SUCCESS]"]
     if len(get_list_failed) == 0:
         print("all running success")
+        os.remove("monitoring.json")
     else:
         run_sub(get_list_failed)
+
+
+data = []
+try:
+    with open("./monitoring.json") as f:
+        monitoring = json.load(f)
+
+    for kunci in monitoring.keys():
+        if monitoring[kunci] == "[SUCCESS]":
+            data.append(True)
+        else:
+            data.append(False)
+
+    if all(data) == True:
+        os.remove("monitoring.json")
+
+    print(data)
+
+except:
+    print("file not exist")
