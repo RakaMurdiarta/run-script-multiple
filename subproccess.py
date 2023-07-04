@@ -13,7 +13,7 @@ def get_files_in_directory(root_path):
     for root, dirs, files in os.walk(root_path):
         dir_list.append(root)
 
-    for dir_ in dir_list:
+    for dir_ in dir_list[1:]:
         for filename in os.listdir(dir_):
             if filename.endswith(".py"):
                 all_path.append(os.path.join(dir_, filename))
@@ -29,12 +29,14 @@ def run_sub(run_py, file_monitoring):
         print(f"there is an error {str(e)}")
         file_monitoring[run_py] = f"[FAILED] : {str(e)}"
 
-    print('create file')
+    print("create file")
     with open("monitoring.json", "w") as outfile:
         json.dump(file_monitoring, outfile)
 
 
-all_run_sub = get_files_in_directory(root_path=root)
+all_run_sub = get_files_in_directory(root_path=root_directory)
+
+print(all_run_sub)
 retries = 0
 while True:
     data = []
